@@ -1,0 +1,200 @@
+swagger: '2.0'
+info:
+  description: This is a sample to handle blogs.  .
+  version: 1.0.0
+  title: 'Swagger Blogs '
+  termsOfService: xxxxx
+  contact:
+    email: apiteam@swagger.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: api.example.com
+basePath: /v1
+tags:
+  - name: blog
+    description: Everything about blogs
+    externalDocs:
+      description: Find out more
+      url: 'http://swagger.io'
+  - name: author
+    description: Access to authors articles
+  - name: authorId
+    description: Operations about authorsId
+    externalDocs:
+      description: Find out more about our blogs
+      url: 'http://swagger.io'
+schemes:
+  - https
+  - http
+paths:
+  /blog:
+    post:
+      tags:
+        - blog
+      summary: Add a new blog
+      description: ''
+      operationId: addblog
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: blog object that needs to be added
+          required: true
+          schema:
+            $ref: '#/definitions/Blog'
+      responses:
+        '405':
+          description: Invalid input
+    put:
+      tags:
+        - blog
+      summary: Update an existing blog
+      description: ''
+      operationId: updateblog
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 'blog object that needs to be added '
+          required: true
+          schema:
+            $ref: '#/definitions/Blog'
+      responses:
+        '400':
+          description: Invalid blogID
+        '404':
+          description: Blog not found
+        '405':
+          description: Validation exception
+  /blog/findById:
+    get:
+      tags:
+        - blog
+      summary: Finds blog by ids
+      description: Multiple ids
+      operationId: findBlogById
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: status
+          in: query
+          description: Id values that need to be considered for filter
+          required: true
+          type: array
+          items:
+            type: string
+            default: available
+          collectionFormat: multi
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Blog'
+        '400':
+          description: Invalid status value
+    delete:
+      tags:
+        - blog
+      summary: Deletes a pet
+      description: ''
+      operationId: deletePet
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: api_key
+          in: header
+          required: false
+          type: string
+        - name: blogId
+          in: path
+          description: Bloid to delete
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Blog id not found
+  /author:
+    post:
+      tags:
+        - author
+      summary: Create author
+      description: This can only be done by author.
+      operationId: createAuthor
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Created authorobject
+          required: true
+          schema:
+            $ref: '#/definitions/Author'
+      responses:
+        default:
+          description: successful operation
+definitions:
+  Author:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      username:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      userStatus:
+        type: integer
+        format: int32
+        description: User Status
+    xml:
+      name: Blog
+  Blog:
+    type: object
+    required:
+      - name
+      - blogUrls
+    properties:
+      id:
+        type: integer
+        format: int64
+  ApiResponse:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      type:
+        type: string
+      message:
+        type: string
+externalDocs:
+  description: Find out more about blogs
+  url: 'http://swagger.io'
